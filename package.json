@@ -1,0 +1,29 @@
+{
+  "name": "bca-project-ii",
+  "version": "1.0.0",
+  "description": "booklet is an online platform to buy and sell old books",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "online",
+    "platform",
+    "sell",
+    "old",
+    "books"
+  ],
+  "author": "Sajan Singh Thakuri",
+  "license": "ISC",
+  "bugs": {
+    
+  },
+  "homepage": "",
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}
