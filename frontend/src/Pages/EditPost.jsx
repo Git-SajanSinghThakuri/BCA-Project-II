@@ -1,23 +1,35 @@
-import React, { useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
   Container,
   Row,
   Col,
+  Card,
   Form,
-  FloatingLabel,
   InputGroup,
   FormControl,
   Button,
+  ButtonGroup,
+  FloatingLabel,
 } from 'react-bootstrap'
-import { FaMapMarker, FaMoneyBill } from 'react-icons/fa'
-import { ImBook } from 'react-icons/im'
-import { BiEdit, BiCategoryAlt } from 'react-icons/bi'
-// import { AiOutlineStock } from 'react-icons/ai'
-import { BsFillHeartFill } from 'react-icons/bs'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { Context } from '../context/Context'
 
-export default function SellBooks() {
+import { FaMapMarker, FaMoneyBill } from 'react-icons/fa'
+import { ImBook } from 'react-icons/im'
+import { BiEdit, BiCategoryAlt } from 'react-icons/bi'
+import { BsFillHeartFill } from 'react-icons/bs'
+
+function EditPost() {
+  // locating the post
+  const find = useLocation()
+  const path = find.pathname.split('/')[2]
+  const [post, setPost] = useState({})
+
+  // Edit-Get Post
+  const { user } = useContext(Context)
+  const [updateMode, setUpdateMode] = useState(false)
+  const PF = 'http://localhost:5000/images/'
   const [title, setTitle] = useState('')
   const [edition, setedition] = useState('')
   const [category, setcategory] = useState('')
@@ -28,13 +40,26 @@ export default function SellBooks() {
   // const [stock, setstock] = useState('')
   const [location, setlocation] = useState('')
   const [file, setFile] = useState(null)
-  const { user } = useContext(Context)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const newPost = {
+  useEffect(() => {
+    const getPost = async () => {
+      const res = await axios.get('/posts/' + path)
+      setPost(res.data)
+      setTitle(res.data.title)
+      setedition(res.data.edition)
+      setcategory(res.data.category)
+      setdescription(res.data.description)
+      setcondition(res.data.condition)
+      setoriginalprice(res.data.originalprice)
+      setprice(res.data.price)
+      setlocation(res.data.location)
+    }
+    getPost()
+  }, [path])
+
+  const handleUpdate = async () => {
+    const updatePost = {
       username: user.username,
-      contact: user.contact,
       title,
       edition,
       category,
@@ -42,7 +67,6 @@ export default function SellBooks() {
       condition,
       originalprice,
       price,
-      // stock,
       location,
     }
     if (file) {
@@ -50,25 +74,38 @@ export default function SellBooks() {
       const filename = Date.now() + file.name
       data.append('name', filename)
       data.append('file', file)
-      newPost.Image = filename
+      updatePost.Image = filename
       try {
         await axios.post('/upload', data)
       } catch (err) {}
     }
+
     try {
-      const res = await axios.post('/posts', newPost)
-      window.location.replace('/post/' + res.data._id)
+      await axios.put(`/posts/${post._id}`, updatePost)
+      window.location.reload()
+      setUpdateMode(false)
     } catch (err) {}
   }
+
+  // Handle Delete
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/posts/${post._id}`, {
+        data: { username: user.username },
+      })
+      window.location.replace('/')
+    } catch (err) {}
+  }
+  console.log(`/posts/${post._id}`)
+
   return (
-    <>
-      <Container>
-        <Form onSubmit={handleSubmit}>
+    <Container className='mt-5'>
+      {updateMode ? (
+        <form>
           <p className='d-flex justify-content-center mt-2'>
-            Please feel free to post your old books so that needy one can get
-            it.
+            You are on edit mode
           </p>
-          <Row>
+          <Row className='d-flex justify-content-center mt-2'>
             <Col sm={6}>
               <InputGroup className='mt-4 mb-3'>
                 <InputGroup.Text>
@@ -78,6 +115,7 @@ export default function SellBooks() {
                   placeholder='Bookname'
                   aria-label='Bookname'
                   required
+                  value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </InputGroup>
@@ -89,6 +127,7 @@ export default function SellBooks() {
                   placeholder='Edition'
                   aria-label='Edition'
                   required
+                  value={edition}
                   onChange={(e) => setedition(e.target.value)}
                 />
               </InputGroup>
@@ -99,7 +138,7 @@ export default function SellBooks() {
                     <BiCategoryAlt className='icon'></BiCategoryAlt>
                   </InputGroup.Text>
                   <Form.Select onChange={(e) => setcategory(e.target.value)}>
-                    <option>Select Category</option>
+                    <option value={category}>{category}</option>
                     <option value='School'>School</option>
                     <option value='+2'>+2</option>
                     <option value='A Level'>A Level</option>
@@ -123,25 +162,11 @@ export default function SellBooks() {
                       aria-label='Price'
                       type='number'
                       required
+                      value={price}
                       onChange={(e) => setprice(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
-
-                {/* <Form.Group as={Col}>
-                  <InputGroup className='mt-4'>
-                    <InputGroup.Text>
-                      <AiOutlineStock className='icon' />
-                    </InputGroup.Text>
-                    <FormControl
-                      placeholder='Stock Books'
-                      aria-label='Number Of Books'
-                      type='number'
-                      required
-                      onChange={(e) => setstock(e.target.value)}
-                    />
-                  </InputGroup>
-                </Form.Group> */}
 
                 <Form.Group as={Col}>
                   <InputGroup className='mt-4'>
@@ -149,10 +174,11 @@ export default function SellBooks() {
                       <FaMapMarker className='icon' />
                     </InputGroup.Text>
                     <FormControl
+                      type='text'
                       placeholder='Location'
                       aria-label='Username'
                       required
-                      type='text'
+                      value={location}
                       onChange={(e) => setlocation(e.target.value)}
                     />
                   </InputGroup>
@@ -163,6 +189,7 @@ export default function SellBooks() {
                   as='textarea'
                   style={{ height: '100px' }}
                   required
+                  value={description}
                   onChange={(e) => setdescription(e.target.value)}
                 />
               </FloatingLabel>
@@ -177,7 +204,7 @@ export default function SellBooks() {
                       aria-label='Floating label select example'
                       onChange={(e) => setcondition(e.target.value)}
                     >
-                      <option>Condition</option>
+                      <option value={condition}>{condition}</option>
                       <option value='New'>New</option>
                       <option value='Used'>Used</option>
                     </Form.Select>
@@ -192,15 +219,15 @@ export default function SellBooks() {
                     <FormControl
                       placeholder='Original Price'
                       aria-label='Original Price'
-                      onChange={(e) => setoriginalprice(e.target.value)}
                       type='number'
                       required
+                      value={originalprice}
+                      onChange={(e) => setoriginalprice(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
               </Row>
             </Col>
-
             <Col sm={6}>
               <Form.Group className='mt-4 mb-3' controlId='formFileMultiple'>
                 <Form.Control
@@ -217,14 +244,70 @@ export default function SellBooks() {
                 />
               )}
             </Col>
-          </Row>
-          <div className='d-grid gap-2'>
-            <Button className='btn custom-btn' size='lg' type='submit'>
-              Post Book Online
+
+            {/* <div className='d-grid gap-2'> */}
+            <Button
+              type='submit'
+              className='btn btn-secondary mb-2'
+              onClick={handleUpdate}
+            >
+              Update Post
             </Button>
-          </div>
-        </Form>
-      </Container>
-    </>
+            {/* </div> */}
+          </Row>
+        </form>
+      ) : (
+        <>
+          <Row>
+            <Col sm={5} className='d-flex'>
+              <Card>
+                <Card.Body>
+                  <Card.Img variant='top' src={PF + post.Image} />
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col sm={7} className='d-flex'>
+              <Card>
+                <Card.Header>
+                  <small className='text-muted'>Description</small>
+                </Card.Header>
+
+                <Card.Body>
+                  <Card.Title>{post.title}</Card.Title>
+                  <Card.Text>{post.desc}</Card.Text>
+                  <p>Description: {post.description}</p>
+                  <p>Condition: {post.condition}</p>
+                  <p>Original Price: Rs.{post.originalprice}</p>
+                  <p>Price: Rs.{post.price} (Negotiable)</p>
+                  <p>Contact: {post.contact} </p>
+                  <p className='card-text'>Location: {post.location}</p>
+                </Card.Body>
+                <Card.Footer>
+                  <div className='d-grid gap-2'>
+                    <ButtonGroup>
+                      <Button
+                        className='btn-secondary btn-sm'
+                        onClick={() => setUpdateMode(true)}
+                      >
+                        Edit Post
+                      </Button>
+
+                      <Button
+                        className='btn-danger btn-sm'
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </Button>
+                    </ButtonGroup>
+                  </div>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      )}
+    </Container>
   )
 }
+
+export default EditPost

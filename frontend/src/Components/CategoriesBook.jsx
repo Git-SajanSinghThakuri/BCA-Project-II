@@ -3,16 +3,14 @@ import { FaMapMarker } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 const CardComponents = ({ post }) => {
-  const PF = 'http://localhost:5000/images/'
-
   return (
     <Col>
       <Card className='my-3 p-3 rounded card' style={{ width: '16rem' }}>
-        <Link to={`post/${post._id}`}>
+        <Link to={`/post/${post._id}`}>
           <Card.Img
             variant='top'
             style={{ height: '18rem' }}
-            src={PF + post.Image}
+            src={post.Image}
           />
           <Card.Body className='post-card-body'>
             <Card.Title className='post-cardtitle'>{post.title}</Card.Title>

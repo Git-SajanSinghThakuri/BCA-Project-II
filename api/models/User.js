@@ -4,11 +4,13 @@ const UserSchema = new mongoose.Schema(
   {
     firstname: {
       type: String,
-      required: true
+      required: true,
+      unique: false
     },
     lastname: {
       type: String,
-      required: true
+      required: true,
+      unique: false
     },
     username: {
       type: String,
@@ -22,7 +24,8 @@ const UserSchema = new mongoose.Schema(
     },
     contact: {
       type: Number,
-      required: true
+      required: true,
+      unique: true
     },
     profilepic: {
       type: String,

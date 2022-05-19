@@ -41,6 +41,12 @@ main {
   color: #fff !important;
 }
 
+.custom-btn:disabled {
+  background: #34b7a7 !important;
+  transition-property: none !important;
+  color: #fff !important;
+}
+
 .icon {
   color: #34b7a7;
 }
@@ -104,8 +110,21 @@ nav :hover {
   display: none !important;
 }
 
-.NavProfile {
+.NavProfile,
+.list-my-product {
   color: #60646b;
+}
+
+.NavProfile:visited {
+  color: #60646b;
+}
+
+.profilepic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
 }
 
 .NavProfile:hover {
@@ -235,4 +254,45 @@ nav :hover {
 }
 
 /* Post Book End */
+/* ----------------------------------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------------------------------- */
+/* Profile */
+.profile-card {
+  background-color: #161b22;
+  height: 100vh;
+  color: #fff;
+}
+
+.profileImg {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 3px solid #5f5f5f;
+}
+
+.profile-edit-btn:hover {
+  border: 1px solid #fff !important;
+  color: #fff !important;
+}
+
+/* ----------------------------------------------------------------------------------------------------------- */
+
+/* 404 */
+.notfound {
+  position: absolute;
+  top: 20%;
+  text-align: center;
+}
+
+.notfound .notfound-404 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 168px;
+  margin: 0px;
+  color: #ff508e;
+  text-transform: uppercase;
+}
+
 /* ----------------------------------------------------------------------------------------------------------- */

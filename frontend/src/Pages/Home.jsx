@@ -1,10 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import books from '../books'
+// import books from '../books'
 import Cards from '../Components/Book'
+import axios from 'axios'
 
 export default function Home() {
-  const Books = books.reduce((BookCategory, { category }, id, Book) => {
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axios.get('/posts')
+      // console.log(res)
+      setPosts(res.data)
+    }
+    fetchPosts()
+  }, [])
+
+  const Books = posts.reduce((BookCategory, { category }, id, Book) => {
     if (!BookCategory[category]) {
       BookCategory[category] = []
     }

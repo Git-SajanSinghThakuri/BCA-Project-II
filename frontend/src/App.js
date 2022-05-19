@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React, { useContext } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Home from './Pages/Home';
@@ -8,36 +7,40 @@ import PageNotFound from './Pages/PageNotFound';
 import SellBooks from './Pages/SellBooks';
 import Post from './Pages/Post';
 import ManageProduct from './Pages/User/ManageProduct';
-import LoginForm from './Pages/LoginForm'
+import EditPost from './Pages/EditPost'
+import Login from './Pages/Login'
 import CreateAccount from './Pages/CreateAccount'
 import ForgotPassword from './Pages/ForgotPassword'
 import Profile from './Pages/User/Profile';
+import Categories from './Pages/Categories';
+import { Context } from './context/Context';
 
-export default class App extends Component {
-  render() {
-    const user = true;
-    // const user=false;
-    return (
-      <>
-        <BrowserRouter>
-          <Header user={user} />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="*" element={<PageNotFound />} />
-              <Route path="/LoginForm" element={user ? <Navigate to="/" /> : <LoginForm />} />
-              <Route path="/CreateAccount" element={user ? <Navigate to="/" /> : <CreateAccount />} />
-              <Route path="/SellBooks" element={user ? <SellBooks /> : <Navigate to="/LoginForm" />} />
-              <Route path="/Post/:id" element={user ? <Post /> : <Navigate to="/LoginForm" />} />
-              <Route path="/Post" element={user ? <CreateAccount /> : <Navigate to="/LoginForm" />} />
-              <Route path="/ManageProduct" element={user ? <ManageProduct /> : <Navigate to="/LoginForm" />} />
-              <Route path="/Profile" element={user ? <Profile /> : <Navigate to="/LoginForm" />} />
-              <Route path="/ForgotPassword" element={user ? <Navigate to="/" /> : <ForgotPassword />} />
-            </Routes>
-          </main>
-          <Footer />
-        </BrowserRouter>
-      </>
-    )
-  }
+export default function App() {
+  const { user } = useContext(Context)
+  // const user = false;
+  return (
+    <>
+      <BrowserRouter>
+        <Header user={user} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/Login" element={user ? <Navigate to="/" /> : <Login />} />
+            <Route path="/CreateAccount" element={user ? <Navigate to="/" /> : <CreateAccount />} />
+            <Route path="/SellBooks" element={user ? <SellBooks /> : <Navigate to="/Login" />} />
+            <Route path="/Post" element={user ? <CreateAccount /> : <Navigate to="/Login" />} />
+            <Route path="/Post/:_id" element={user ? <Post /> : <Navigate to="/Login" />} />
+            <Route path="/EditPost/:_id" element={user ? <EditPost /> : <Navigate to="/Login" />} />
+            <Route path="/Category" element={user ? <Categories /> : <Navigate to="/Login" />} />
+            <Route path="/Category/Post/:_id" element={user ? <Post /> : <Navigate to="/Login" />} />
+            <Route path="/ManageProduct" element={user ? <ManageProduct /> : <Navigate to="/Login" />} />
+            <Route path="/Profile" element={user ? <Profile /> : <Navigate to="/Login" />} />
+            <Route path="/ForgotPassword" element={user ? <Navigate to="/" /> : <ForgotPassword />} />
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </>
+  )
 }

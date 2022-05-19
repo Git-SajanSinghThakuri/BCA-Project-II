@@ -1,9 +1,13 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const PostSchema = new mongoose.Schema(
   {
     username: {
       type: String,
+      required: true,
+    },
+    contact: {
+      type: Number,
       required: true,
     },
     title: {
@@ -12,11 +16,11 @@ const PostSchema = new mongoose.Schema(
     },
     edition: {
       type: String,
-      required: true,
+      required: true
     },
     category: {
       type: Array,
-      required: true,
+      required: true
     },
     description: {
       type: String,
@@ -34,13 +38,17 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    stock: {
-      type: String,
-      required: true,
-    },
+    // stock: {
+    //   type: String,
+    //   required: true,
+    // },
     location: {
       type: String,
       required: true,
+    },
+    Image: {
+      type: String,
+      required: false,
     }
   },
   { timestamps: true }
