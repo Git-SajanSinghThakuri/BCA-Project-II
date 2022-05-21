@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 //CREATE POST
 router.post("/", async (req, res) => {
@@ -57,14 +58,24 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-
 //GET POST
 router.get("/:id", async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    res.status(200).json(post);
-  } catch (err) {
-    res.status(500).json(err);
+  if (ObjectId.isValid(req.params.id)) {
+    try {
+      const post = await Post.findById(req.params.id);
+      res.status(200).json(post);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    try {
+      category = req.params.id;
+      const post = await Post.find({ category });
+      res.status(200).json(post);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   }
 });
 
@@ -90,6 +101,5 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 module.exports = router;
