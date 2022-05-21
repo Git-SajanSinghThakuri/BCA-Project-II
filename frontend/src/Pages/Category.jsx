@@ -20,7 +20,7 @@ export default function Categories() {
     fetchPosts();
     console.log("/posts/" + path);
     console.log(path);
-  }, []);
+  }, [path]);
 
   return (
     <>
