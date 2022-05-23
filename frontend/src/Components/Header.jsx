@@ -1,51 +1,51 @@
-import { useContext } from "react";
+import { useContext } from 'react'
 import {
   Navbar,
   Container,
   Nav,
   NavDropdown,
-  Form,
-  FormControl,
+  // Form,
+  // FormControl,
   Image,
   Stack,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { BsFillGrid3X3GapFill } from "react-icons/bs";
-import { Context } from "../context/Context";
-import Categories from "./Categories";
-import BookletLogo from "../img/Logo.png";
+} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { BsFillGrid3X3GapFill } from 'react-icons/bs'
+import { Context } from '../context/Context'
+import Categories from './Categories'
+import BookletLogo from '../img/Logo.png'
 
 const Header = ({ user }) => {
-  const PF = "http://localhost:5000/images/";
-  const { dispatch } = useContext(Context);
+  const PF = 'http://localhost:5000/images/'
+  const { dispatch } = useContext(Context)
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
-  };
+    dispatch({ type: 'LOGOUT' })
+  }
   return (
     <>
-      <Navbar sticky="top" className="navbar" expand="lg">
+      <Navbar sticky='top' className='navbar' expand='lg'>
         <Container>
-          <Navbar.Brand className="Brand" as={Link} to="/">
+          <Navbar.Brand className='Brand' as={Link} to='/'>
             <Image
-              alt=""
+              alt=''
               src={BookletLogo}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{" "}
+              width='30'
+              height='30'
+              className='d-inline-block align-top'
+            />{' '}
             Booklet
           </Navbar.Brand>
 
           <Navbar.Toggle
-            className="NavbarToggler"
-            aria-controls="navbarScroll"
+            className='NavbarToggler'
+            aria-controls='navbarScroll'
           />
-          <Navbar.Collapse id="navbarScroll">
+          <Navbar.Collapse id='navbarScroll'>
             <Nav>
-              <Nav.Link className="NavLink" as={Link} to="/">
+              <Nav.Link className='NavLink' as={Link} to='/'>
                 Home
               </Nav.Link>
-              <Nav.Link className="NavLink" as={Link} to="/SellBooks">
+              <Nav.Link className='NavLink' as={Link} to='/SellBooks'>
                 Sell Book
               </Nav.Link>
               <Categories />
@@ -58,18 +58,19 @@ const Header = ({ user }) => {
                 aria-label='Search'
               />
             </Form> */}
-            <Nav className="d-flex me-auto my-2 my-lg-0">
-              <Nav.Link className="NavLink" as={Link} to="/Search">
+
+            <Nav className='d-flex me-auto my-2 my-lg-0'>
+              <Nav.Link className='NavLink' as={Link} to='/Books'>
                 Books
               </Nav.Link>
             </Nav>
 
             {user ? (
               <Stack
-                direction="horizontal"
-                className="d-flex justify-content-center"
+                direction='horizontal'
+                className='d-flex justify-content-center'
               >
-                <Nav.Link as={Link} to="/Profile">
+                <Nav.Link as={Link} to='/Profile'>
                   {/* <Image
                     className='profilepic'
                     src={PF + user.profilepic}
@@ -77,40 +78,40 @@ const Header = ({ user }) => {
                   /> */}
 
                   <Image
-                    className="profilepic"
+                    className='profilepic'
                     src={PF + user.profilepic}
                     onError={(e) => {
-                      e.target.onerror = null;
+                      e.target.onerror = null
                       e.target.src =
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/512px-Breezeicons-actions-22-im-user.svg.png?20160527143724";
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/512px-Breezeicons-actions-22-im-user.svg.png?20160527143724'
                     }}
                   />
                 </Nav.Link>
-                <Nav.Link as={Link} to="/Profile" className="NavProfile">
+                <Nav.Link as={Link} to='/Profile' className='NavProfile'>
                   {user.firstname}
                 </Nav.Link>
                 <NavDropdown
-                  className="GridDropdown"
-                  title={<BsFillGrid3X3GapFill size={25} className="icon" />}
+                  className='GridDropdown'
+                  title={<BsFillGrid3X3GapFill size={25} className='icon' />}
                 >
                   <NavDropdown.Item
-                    className="dropdownItem"
+                    className='dropdownItem'
                     Link
                     as={Link}
-                    to="/ManageProduct"
+                    to='/ManageProduct'
                   >
                     Manage Product
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    className="dropdownItem"
+                    className='dropdownItem'
                     Link
                     as={Link}
-                    to="/SellBooks"
+                    to='/SellBooks'
                   >
                     Sell Book
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    className="dropdownItem"
+                    className='dropdownItem'
                     onClick={handleLogout}
                   >
                     LogOut
@@ -119,17 +120,17 @@ const Header = ({ user }) => {
               </Stack>
             ) : (
               <Stack
-                direction="horizontal"
-                className="d-flex justify-content-center"
+                direction='horizontal'
+                className='d-flex justify-content-center'
               >
                 <Nav>
-                  <Nav.Link className="NavLink" as={Link} to="/Login">
+                  <Nav.Link className='NavLink' as={Link} to='/Login'>
                     LogIn
                   </Nav.Link>
                   <Nav.Link
-                    className="CustomButton"
+                    className='CustomButton'
                     as={Link}
-                    to="/CreateAccount"
+                    to='/CreateAccount'
                   >
                     Create Account
                   </Nav.Link>
@@ -140,6 +141,6 @@ const Header = ({ user }) => {
         </Container>
       </Navbar>
     </>
-  );
-};
-export default Header;
+  )
+}
+export default Header
