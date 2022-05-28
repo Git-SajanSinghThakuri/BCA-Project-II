@@ -1,5 +1,4 @@
-import React from 'react'
-import { useContext, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
   Container,
   Image,
@@ -15,6 +14,7 @@ import { Context } from '../../context/Context'
 import { FiClock } from 'react-icons/fi'
 import { GoDeviceMobile } from 'react-icons/go'
 import { FiMail } from 'react-icons/fi'
+import { TiCamera } from 'react-icons/ti'
 import ManageProduct from './ManageProduct'
 import axios from 'axios'
 
@@ -27,11 +27,21 @@ export default function Profile() {
   const [file, setFile] = useState(null)
   const [firstname, setfirstname] = useState('')
   const [lastname, setlastname] = useState('')
-  // const [username, setusername] = useState('')
   const [email, setemail] = useState('')
   const [contact, setcontact] = useState('')
-  const [password, setpassword] = useState('')
   const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get(`/users/${user._id}`)
+      setFile(res.data.file)
+      setfirstname(res.data.firstname)
+      setlastname(res.data.lastname)
+      setemail(res.data.email)
+      setcontact(res.data.contact)
+    }
+    getUser()
+  }, [user._id])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -42,10 +52,8 @@ export default function Profile() {
       _id: user._id,
       firstname,
       lastname,
-      // username,
       contact,
       email,
-      password,
     }
     if (file) {
       const data = new FormData()
@@ -78,41 +86,68 @@ export default function Profile() {
                   className='card border-0 profile-card'
                 >
                   <form onSubmit={handleSubmit}>
-                    <div className='d-flex justify-content-center pt-2'>
-                      <Form.Group
-                        className='mt-4 mb-3'
-                        controlId='formFileMultiple'
-                      >
-                        <Form.Control
-                          type='file'
-                          onChange={(e) => setFile(e.target.files[0])}
-                          required
-                        />
-                      </Form.Group>
-                    </div>
+                    <Card.Body>
+                      <div className='d-flex justify-content-center pt-2'>
+                        <label htmlFor='fileInput'>
+                          <Image
+                            className='profileImg'
+                            src={
+                              file
+                                ? URL.createObjectURL(file)
+                                : PF + user.profilepic
+                            }
+                            onError={(e) => {
+                              e.target.onerror = null
+                              e.target.src =
+                                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/512px-Breezeicons-actions-22-im-user.svg.png?20160527143724'
+                            }}
+                            type='file'
+                            onChange={(e) => setFile(e.target.files[0])}
+                            required
+                          />
+                          <TiCamera />
+                        </label>
+                        <Form.Group className='mt-4 mb-3'>
+                          <Form.Control
+                            type='file'
+                            id='fileInput'
+                            className='d-none'
+                            onChange={(e) => setFile(e.target.files[0])}
+                            required
+                          />
+                        </Form.Group>
+                      </div>
 
+                      <div className='d-grid gap-2'>
+                        <Button
+                          type='submit'
+                          className='btn btn-secondary mt-2 profile-edit-btn'
+                        >
+                          Update Profile Picture
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </form>
+
+                  <form onSubmit={handleSubmit}>
                     <Card.Body>
                       <InputGroup className='mb-3'>
                         <FormControl
                           placeholder='First name'
+                          value={firstname}
                           onChange={(e) => setfirstname(e.target.value)}
                         />
                         <FormControl
                           placeholder='Last name'
+                          value={lastname}
                           onChange={(e) => setlastname(e.target.value)}
                         />
                       </InputGroup>
 
-                      {/* <InputGroup className='mb-3'>
-                        <FormControl
-                          placeholder='User name'
-                          onChange={(e) => setusername(e.target.value)}
-                        />
-                      </InputGroup> */}
-
                       <InputGroup className='mb-3'>
                         <FormControl
                           placeholder='email'
+                          value={email}
                           onChange={(e) => setemail(e.target.value)}
                         />
                       </InputGroup>
@@ -120,18 +155,10 @@ export default function Profile() {
                       <InputGroup className='mb-3'>
                         <FormControl
                           placeholder='contact'
+                          value={contact}
                           onChange={(e) => setcontact(e.target.value)}
                         />
                       </InputGroup>
-
-                      <InputGroup className='mb-3'>
-                        <FormControl
-                          type='password'
-                          placeholder='Password'
-                          onChange={(e) => setpassword(e.target.value)}
-                        />
-                      </InputGroup>
-
                       <div className='d-grid gap-2'>
                         <Button
                           type='submit'
@@ -171,14 +198,6 @@ export default function Profile() {
                   className='card border-0 profile-card'
                 >
                   <div className='d-flex justify-content-center pt-2'>
-                    {/* <Image
-                      variant='top'
-                      className='profileImg'
-                      src={PF + user.profilepic}
-                      roundedCircle
-                      fluid
-                    /> */}
-
                     <Image
                       className='profileImg'
                       src={PF + user.profilepic}

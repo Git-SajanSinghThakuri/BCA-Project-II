@@ -141,12 +141,14 @@ function EditPost() {
                     <option value={category}>{category}</option>
                     <option value='School'>School</option>
                     <option value='+2'>+2</option>
-                    <option value='A Level'>A Level</option>
-                    <option value='Bachelors'>Bachelor</option>
-                    <option value='Master'>Master</option>
-                    <option value='Literature & Fiction'>
-                      Literature & Fiction
+                    <option value='CTEVT'>CTEVT</option>
+                    <option value='Entrance Preparation'>
+                      Entrance Preparation
                     </option>
+                    <option value='A Level'>A Level</option>
+                    <option value='Bachelors'>Bachelors</option>
+                    <option value='Masters'>Masters</option>
+                    <option value='Novels And More'>Novels And More</option>
                   </Form.Select>
                 </InputGroup>
               </Form.Group>

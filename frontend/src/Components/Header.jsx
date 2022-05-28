@@ -4,8 +4,6 @@ import {
   Container,
   Nav,
   NavDropdown,
-  // Form,
-  // FormControl,
   Image,
   Stack,
 } from 'react-bootstrap'
@@ -50,14 +48,6 @@ const Header = ({ user }) => {
               </Nav.Link>
               <Categories />
             </Nav>
-            {/* <Form className='d-flex me-auto my-2 my-lg-0'>
-              <FormControl
-                type='search'
-                placeholder='Search'
-                className='me-2'
-                aria-label='Search'
-              />
-            </Form> */}
 
             <Nav className='d-flex me-auto my-2 my-lg-0'>
               <Nav.Link className='NavLink' as={Link} to='/Books'>
@@ -71,12 +61,6 @@ const Header = ({ user }) => {
                 className='d-flex justify-content-center'
               >
                 <Nav.Link as={Link} to='/Profile'>
-                  {/* <Image
-                    className='profilepic'
-                    src={PF + user.profilepic}
-                    alt=''
-                  /> */}
-
                   <Image
                     className='profilepic'
                     src={PF + user.profilepic}
